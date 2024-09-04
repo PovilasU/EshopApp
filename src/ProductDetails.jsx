@@ -15,7 +15,11 @@ function ProductDetails({ products, addToCart }) {
 
   const [wellRadius, setWellRadius] = useState(1000); // in millimeters
   const [wellHeight, setWellHeight] = useState(2000); // in millimeters
-  const [wellDistance, setWellDistance] = useState(10000); // in millimeters
+  const [wellDistance, setWellDistance] = useState(4000); // in millimeters
+
+  const [fenceWidth, setFenceWidth] = useState(22000); // in millimeters
+  const [fenceHeight, setFenceHeight] = useState(2000); // in millimeters
+  const [fenceDepth, setFenceDepth] = useState(35000); // in millimeters
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -31,6 +35,9 @@ function ProductDetails({ products, addToCart }) {
     const wellRadiusMeters = wellRadius / 1000;
     const wellHeightMeters = wellHeight / 1000;
     const wellDistanceMeters = wellDistance / 1000;
+    const fenceWidthMeters = fenceWidth / 1000;
+    const fenceHeightMeters = fenceHeight / 1000;
+    const fenceDepthMeters = fenceDepth / 1000;
 
     const scene = createScene(
       canvas,
@@ -40,7 +47,10 @@ function ProductDetails({ products, addToCart }) {
       houseDepthMeters,
       wellRadiusMeters,
       wellHeightMeters,
-      wellDistanceMeters
+      wellDistanceMeters,
+      fenceWidthMeters,
+      fenceHeightMeters,
+      fenceDepthMeters
     );
 
     engine.runRenderLoop(() => {
@@ -61,6 +71,9 @@ function ProductDetails({ products, addToCart }) {
     wellRadius,
     wellHeight,
     wellDistance,
+    fenceWidth,
+    fenceHeight,
+    fenceDepth,
   ]);
 
   if (!product) {
@@ -162,6 +175,35 @@ function ProductDetails({ products, addToCart }) {
             type="number"
             value={wellDistance}
             onChange={(e) => setWellDistance(parseFloat(e.target.value))}
+            className="form-control"
+          />
+        </div>
+      </div>
+      <div className="row mt-3">
+        <div className="col-md-4">
+          <label>Fence Width (mm):</label>
+          <input
+            type="number"
+            value={fenceWidth}
+            onChange={(e) => setFenceWidth(parseFloat(e.target.value))}
+            className="form-control"
+          />
+        </div>
+        <div className="col-md-4">
+          <label>Fence Height (mm):</label>
+          <input
+            type="number"
+            value={fenceHeight}
+            onChange={(e) => setFenceHeight(parseFloat(e.target.value))}
+            className="form-control"
+          />
+        </div>
+        <div className="col-md-4">
+          <label>Fence Depth (mm):</label>
+          <input
+            type="number"
+            value={fenceDepth}
+            onChange={(e) => setFenceDepth(parseFloat(e.target.value))}
             className="form-control"
           />
         </div>
