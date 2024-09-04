@@ -8,9 +8,14 @@ function ProductDetails({ products, addToCart }) {
   const { id } = useParams();
   const product = products.find((p) => p.id === parseInt(id));
   const canvasRef = useRef(null);
-  const [length, setLength] = useState(5000); // Default length in mm
-  const [width, setWidth] = useState(3000); // Default width in mm
-  const [height, setHeight] = useState(5000); // Default height in mm
+
+  const [houseWidth, setHouseWidth] = useState(10000); // in millimeters
+  const [houseHeight, setHouseHeight] = useState(5000); // in millimeters
+  const [houseDepth, setHouseDepth] = useState(10000); // in millimeters
+
+  const [wellRadius, setWellRadius] = useState(1000); // in millimeters
+  const [wellHeight, setWellHeight] = useState(2000); // in millimeters
+  const [wellDistance, setWellDistance] = useState(10000); // in millimeters
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -19,7 +24,24 @@ function ProductDetails({ products, addToCart }) {
       stencil: true,
     });
 
-    const scene = createScene(canvas, engine, length, width, height);
+    // Convert millimeters to meters
+    const houseWidthMeters = houseWidth / 1000;
+    const houseHeightMeters = houseHeight / 1000;
+    const houseDepthMeters = houseDepth / 1000;
+    const wellRadiusMeters = wellRadius / 1000;
+    const wellHeightMeters = wellHeight / 1000;
+    const wellDistanceMeters = wellDistance / 1000;
+
+    const scene = createScene(
+      canvas,
+      engine,
+      houseWidthMeters,
+      houseHeightMeters,
+      houseDepthMeters,
+      wellRadiusMeters,
+      wellHeightMeters,
+      wellDistanceMeters
+    );
 
     engine.runRenderLoop(() => {
       scene.render();
@@ -32,13 +54,14 @@ function ProductDetails({ products, addToCart }) {
     return () => {
       engine.dispose();
     };
-  }, [length, width, height]);
-
-  const handleUpdate = () => {
-    setLength(parseFloat(document.getElementById("length").value));
-    setWidth(parseFloat(document.getElementById("width").value));
-    setHeight(parseFloat(document.getElementById("height").value));
-  };
+  }, [
+    houseWidth,
+    houseHeight,
+    houseDepth,
+    wellRadius,
+    wellHeight,
+    wellDistance,
+  ]);
 
   if (!product) {
     return <div>Product not found</div>;
@@ -87,41 +110,60 @@ function ProductDetails({ products, addToCart }) {
       </div>
       <div className="row mt-3">
         <div className="col-md-4">
-          <label htmlFor="length">Length (mm):</label>
+          <label>House Width (mm):</label>
           <input
             type="number"
-            id="length"
+            value={houseWidth}
+            onChange={(e) => setHouseWidth(parseFloat(e.target.value))}
             className="form-control"
-            defaultValue={length}
-            onKeyPress={(e) => e.key === "Enter" && handleUpdate()}
           />
         </div>
         <div className="col-md-4">
-          <label htmlFor="width">Width (mm):</label>
+          <label>House Height (mm):</label>
           <input
             type="number"
-            id="width"
+            value={houseHeight}
+            onChange={(e) => setHouseHeight(parseFloat(e.target.value))}
             className="form-control"
-            defaultValue={width}
-            onKeyPress={(e) => e.key === "Enter" && handleUpdate()}
           />
         </div>
         <div className="col-md-4">
-          <label htmlFor="height">Height (mm):</label>
+          <label>House Depth (mm):</label>
           <input
             type="number"
-            id="height"
+            value={houseDepth}
+            onChange={(e) => setHouseDepth(parseFloat(e.target.value))}
             className="form-control"
-            defaultValue={height}
-            onKeyPress={(e) => e.key === "Enter" && handleUpdate()}
           />
         </div>
       </div>
       <div className="row mt-3">
-        <div className="col-md-12">
-          <button className="btn btn-primary" onClick={handleUpdate}>
-            Update Dimensions
-          </button>
+        <div className="col-md-4">
+          <label>Well Radius (mm):</label>
+          <input
+            type="number"
+            value={wellRadius}
+            onChange={(e) => setWellRadius(parseFloat(e.target.value))}
+            className="form-control"
+          />
+        </div>
+        <div className="col-md-4">
+          <label>Well Height (mm):</label>
+          <input
+            type="number"
+            value={wellHeight}
+            onChange={(e) => setWellHeight(parseFloat(e.target.value))}
+            className="form-control"
+          />
+        </div>
+        <div className="col-md-4">
+          <label>Distance from House (mm):</label>
+          <input
+            type="number"
+            value={wellDistance}
+            onChange={(e) => setWellDistance(parseFloat(e.target.value))}
+            className="form-control"
+          />
         </div>
       </div>
     </div>

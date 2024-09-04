@@ -1,6 +1,6 @@
 import * as BABYLON from "babylonjs";
 
-export const createScene = (canvas, engine) => {
+export const createScene = (canvas, engine, houseWidth, houseHeight, houseDepth, wellRadius, wellHeight, wellDistance) => {
   const scene = new BABYLON.Scene(engine);
 
   // Camera
@@ -94,7 +94,7 @@ export const createScene = (canvas, engine) => {
     return customMesh;
   };
 
-  const baseData = [-5, 0, 5, 0, 5, 6, 2, 6, 2, 9, -5, 9];
+  const baseData = [-houseWidth / 2, 0, houseWidth / 2, 0, houseWidth / 2, houseDepth, houseWidth / 4, houseDepth, houseWidth / 4, houseDepth + houseHeight, -houseWidth / 2, houseDepth + houseHeight];
 
   const corners = [];
   for (let b = 0; b < baseData.length / 2; b++) {
@@ -107,22 +107,31 @@ export const createScene = (canvas, engine) => {
   }
 
   const ply = 0.3;
-  const height = 5;
+  const height = houseHeight;
 
   const build = buildFromPlan(walls, ply, height, scene);
 
   // Add two water treatment wells next to the house
-  const well1 = BABYLON.MeshBuilder.CreateCylinder("well1", { diameter: 1, height: 2 }, scene);
-  well1.position = new BABYLON.Vector3(-3, 1, 10);
+  const well1 = BABYLON.MeshBuilder.CreateCylinder("well1", { diameter: wellRadius * 2, height: wellHeight }, scene);
+  well1.position = new BABYLON.Vector3(houseWidth / 2 + wellRadius + wellDistance, -wellHeight / 2, houseDepth / 2); // Position well1 outside the house
 
-  const well2 = BABYLON.MeshBuilder.CreateCylinder("well2", { diameter: 1, height: 2 }, scene);
-  well2.position = new BABYLON.Vector3(3, 1, 10);
+  const well2 = BABYLON.MeshBuilder.CreateCylinder("well2", { diameter: wellRadius * 2, height: wellHeight }, scene);
+  well2.position = new BABYLON.Vector3(houseWidth / 2 + wellRadius + wellDistance, -wellHeight / 2, -houseDepth / 2); // Position well2 outside the house
 
   // Apply a simple material to the wells
   const wellMaterial = new BABYLON.StandardMaterial("wellMat", scene);
   wellMaterial.diffuseTexture = new BABYLON.Texture("https://i.imgur.com/88fOIk3.jpg", scene); // Brick texture
   well1.material = wellMaterial;
   well2.material = wellMaterial;
+
+  // Add drag behavior to the wells
+  const addDragBehavior = (mesh) => {
+    const dragBehavior = new BABYLON.PointerDragBehavior({ dragPlaneNormal: new BABYLON.Vector3(0, 1, 0) });
+    mesh.addBehavior(dragBehavior);
+  };
+
+  addDragBehavior(well1);
+  addDragBehavior(well2);
 
   return scene;
 };
