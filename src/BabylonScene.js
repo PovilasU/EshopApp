@@ -1,6 +1,6 @@
 import * as BABYLON from "babylonjs";
 
-export const createScene = (canvas, engine, length, width, height) => {
+export const createScene = (canvas, engine) => {
   const scene = new BABYLON.Scene(engine);
 
   // Camera
@@ -94,7 +94,7 @@ export const createScene = (canvas, engine, length, width, height) => {
     return customMesh;
   };
 
-  const baseData = [-length / 1000, 0, length / 1000, 0, length / 1000, width / 1000, 2, width / 1000, 2, height / 1000, -length / 1000, height / 1000];
+  const baseData = [-5, 0, 5, 0, 5, 6, 2, 6, 2, 9, -5, 9];
 
   const corners = [];
   for (let b = 0; b < baseData.length / 2; b++) {
@@ -107,8 +107,22 @@ export const createScene = (canvas, engine, length, width, height) => {
   }
 
   const ply = 0.3;
+  const height = 5;
 
-  const build = buildFromPlan(walls, ply, height / 1000, scene);
+  const build = buildFromPlan(walls, ply, height, scene);
+
+  // Add two water treatment wells next to the house
+  const well1 = BABYLON.MeshBuilder.CreateCylinder("well1", { diameter: 1, height: 2 }, scene);
+  well1.position = new BABYLON.Vector3(-3, 1, 10);
+
+  const well2 = BABYLON.MeshBuilder.CreateCylinder("well2", { diameter: 1, height: 2 }, scene);
+  well2.position = new BABYLON.Vector3(3, 1, 10);
+
+  // Apply a simple material to the wells
+  const wellMaterial = new BABYLON.StandardMaterial("wellMat", scene);
+  wellMaterial.diffuseTexture = new BABYLON.Texture("https://i.imgur.com/88fOIk3.jpg", scene); // Brick texture
+  well1.material = wellMaterial;
+  well2.material = wellMaterial;
 
   return scene;
 };
