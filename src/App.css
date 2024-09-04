@@ -10,15 +10,59 @@ body {
   padding: 20px 0;
 }
 
-.modal.show {
-  display: block;
-}
-
-.modal-lg {
-  max-width: 80%;
-}
-
 .img-fluid {
   max-width: 100%;
   height: auto;
+}
+
+.navbar {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e7e7e7;
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.nav-link {
+  font-size: 1rem;
+}
+
+.card {
+  border: 1px solid #e7e7e7;
+  border-radius: 0.25rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.card-text {
+  font-size: 1rem;
+  color: #555;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+.footer {
+  background-color: #f8f9fa;
+  border-top: 1px solid #e7e7e7;
+  padding: 20px 0;
+  text-align: center;
+}
+
+.footer p {
+  margin: 0;
+  color: #888;
 }
